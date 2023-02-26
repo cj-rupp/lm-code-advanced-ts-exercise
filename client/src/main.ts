@@ -19,7 +19,8 @@ async function main() {
 	let state:State = new State();
 
 	while (true) {
-		const resultState = await stateTransition(state.get());
+		const currentState:AnyState = state.get();
+		const resultState:AnyState = await stateTransition(currentState);
 		if(resultState) {
 			state.set(resultState);
 			break; 
@@ -37,73 +38,6 @@ async function main() {
 	}
 }
 
-/*
-async function main() {
-	let state:State = new State();
-
-	while (true) {
-		switch (state.get()) {
-			case "MENU":
-				const newMenuOption = await showMenu();
-				state.set(newMenuOption);
-				break;
-			case "SEND_MESSAGE":
-				const nextState = await sendMessage();
-				state.set(nextState);
-				break;
-			case "SHOW_POSTS":
-				clear();
-				const posts = await showAllPosts();
-				state.set(STATES[0]);
-				break;
-			case "SHOW_USERS":
-				clear();
-				const users = await showAllUsers();
-				state.set(STATES[0]);
-				break;
-			case "BROWSE_POSTS":
-				clear();
-				const post = await browsePosts();
-				state.set(STATES[0]);
-				break;
-			case "ADD_USER":
-				clear();
-				print("🏗️  This functionality has not been implemented!");
-				await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
-				state.set(STATES[0]);
-				break;
-			case "UNKNOWN":
-				clear();
-				print("😵 We have entered an unknown state.");
-				await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
-				state.set(STATES[0]);
-				break;
-*/
-			/*
-			case "CABBAGE":
-				clear();
-				print("🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬", false);
-				print("🥬      CABBAGE MODE UNLOCKED     🥬", false);
-				print("🥬     Why did you want this?     🥬", false);
-				print("🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬🥬", false);
-				await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
-				state.set(STATES[0]);
-				break;
-			default:
-				clear();
-				print(`🌋 😱 Uh-oh, we've entered an invalid state: "${state.get()}"`);
-				print("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥", false);
-				print("💥 Crashing the program now...  💥", false);
-				print("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥", false);
-				printNewLine();
-				exit(99);
-				break;
-			*/
-/*
-		}
-	}
-}
-*/
 /*
 
 I tried to make this an overloaded function, but it wouldn't recognise the function
@@ -124,41 +58,48 @@ function stateTransition(currentState:"ADD_USERS"): "MENU";
 function stateTransition(currentState:"UNKNOWN"): "MENU";
 */
 
-function stateTransition(currentState:AnyState) {
+async function stateTransition(currentState:AnyState):Promise<AnyState> {
 	const surrogateStateList = [...STATES];
 	if(surrogateStateList.indexOf(currentState) === 0){
-		return showMenu();
+		const selectedState = await showMenu();
+		return selectedState;
 	}
 	else if(surrogateStateList.indexOf(currentState) === 1){
-		return sendMessage();
+		const messageState = await sendMessage();
+		return messageState;
 	}
 	else if(surrogateStateList.indexOf(currentState) === 2){
 		clear();
-		showAllPosts();
+		await showAllPosts();
 		return "MENU";
 	}	
 	else if(surrogateStateList.indexOf(currentState) === 3){
 		clear();
-		showAllUsers();
+		await showAllUsers();
 		return "MENU";
 	}	
 	else if(surrogateStateList.indexOf(currentState) === 4){
 		clear();
-		browsePosts();
+		await browsePosts();
 		return "MENU";
 	}	
 	else if(surrogateStateList.indexOf(currentState) === 5){
 		clear();
 		print("🏗️  This functionality has not been implemented!");
-		prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
+		await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
 		return "MENU";
 	}	
 	else if(surrogateStateList.indexOf(currentState) === 6){
 		clear();
 		print("😵 We have entered an unknown state.");
-		prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
+		await prompt("⌨️ Press [ENTER] to return to the main menu! 🕶️");
 		return "MENU";
 	}
+	else{
+		return "UNKNOWN";
+	}
+
+	return "UNKNOWN";
 }
 
 begin();

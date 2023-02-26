@@ -1,5 +1,6 @@
 import { print, prompt } from "../ui/console";
 import { baseUrl } from "./base_url";
+import { STATES, AnyState } from "../states/states";
 
 export async function sendMessageToServer(message:string) {
 	try {
