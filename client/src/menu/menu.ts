@@ -1,7 +1,7 @@
 import { STATES, AnyState } from "../states/states";
 import { clear, print, printNewLine, prompt } from "../ui/console";
 
-export async function showMenu():Promise<AnyState> {
+export async function showMenu() {
 	clear();
 	print("0. Send Server Message", false);
 	print("1. Show all posts", false);

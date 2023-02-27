@@ -2,7 +2,7 @@ import { sendMessageToServer } from "../../../api/send_message_to_server";
 import { STATES, AnyState } from "../../../states/states";
 import { clear, print, printNewLine, prompt } from "../../../ui/console";
 
-export async function sendMessage():Promise<AnyState> {
+export async function sendMessage() {
 	clear();
 
 	const message:string = await prompt("What message shall we send? ");

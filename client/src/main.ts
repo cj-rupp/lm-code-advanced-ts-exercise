@@ -23,7 +23,6 @@ async function main() {
 		const resultState:AnyState = await stateTransition(currentState);
 		if(resultState) {
 			state.set(resultState);
-			break; 
 		}
 		else {
 			clear();
@@ -33,7 +32,6 @@ async function main() {
 			print("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥", false);
 			printNewLine();
 			exit(99);
-			break;
 		}
 	}
 }
@@ -43,22 +41,22 @@ async function main() {
 I tried to make this an overloaded function, but it wouldn't recognise the function
 signatures as correct, only the implementation. So, I just used that.
 
-function stateTransition(currentState:"MENU"): AnyState;
+async function stateTransition(currentState:"MENU"): Promise<AnyState>;
 
-function stateTransition(currentState:"SEND_MESSAGE"): AnyState;
+async function stateTransition(currentState:"SEND_MESSAGE"): Promise<AnyState>;
 
-function stateTransition(currentState:"SHOW_POSTS"): "MENU";
+async function stateTransition(currentState:"SHOW_POSTS"): Promise<"MENU">;
 
-function stateTransition(currentState:"SHOW_USERS"): "MENU";
+async function stateTransition(currentState:"SHOW_USERS"): Promise<"MENU">;
 
-function stateTransition(currentState:"BROWSE_POSTS"): "MENU";
+async function stateTransition(currentState:"BROWSE_POSTS"): Promise<"MENU">;
 
-function stateTransition(currentState:"ADD_USERS"): "MENU";
+async function stateTransition(currentState:"ADD_USER"): Promise<"MENU">;
 
-function stateTransition(currentState:"UNKNOWN"): "MENU";
+async function stateTransition(currentState:AnyState): Promise<"UNKOWN">;
 */
 
-async function stateTransition(currentState:AnyState):Promise<AnyState> {
+async function stateTransition(currentState:AnyState) {
 	const surrogateStateList = [...STATES];
 	if(surrogateStateList.indexOf(currentState) === 0){
 		const selectedState = await showMenu();
@@ -98,8 +96,6 @@ async function stateTransition(currentState:AnyState):Promise<AnyState> {
 	else{
 		return "UNKNOWN";
 	}
-
-	return "UNKNOWN";
 }
 
 begin();
